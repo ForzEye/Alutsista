@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Page</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+
+    <!-- Summernote CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet" />
+
+    <!-- Custom Styles -->
+    <link href="{{ url_for('static', filename = 'style.css') }}" rel="stylesheet" />
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <!-- Summernote JS -->
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+
+    <!-- Popper.js Core -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 bg-body-tertiary" id="navbar">
+      <a href="{{ url_for('admin') }}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"><h2>ALUTSISTA</h2></a>
+
+      <ul class="nav nav-pills" id="admin">
+        <li class="nav-item">
+          <h3 id="current-time"></h3>
+        </li>
+        <li class="nav-item">
+          <h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+            </svg>
+          </h3>
+        </li>
+      </ul>
+    </header>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-4 col-12">
+          <div class="d-flex flex-column p-3 bg-body-tertiary">
+            <ul class="nav nav-pills flex-column mb-auto">
+              <li class="nav-item">
+                <a href="{{ url_for('admin') }}" class="nav-link active" aria-current="page">Dashboard</a>
+              </li>
+              <li>
+                <a href="{{ url_for('tambah') }}" class="nav-link link-body-emphasis">Tambah Senjata</a>
+              </li>
+              <li>
+                <a href="{{ url_for('data_peminjam') }}" class="nav-link link-body-emphasis">Data Peminjam</a>
+              </li>
+              <li>
+                <a href="{{ url_for('data_pengembalian') }}" class="nav-link link-body-emphasis">Data Pengembalian</a>
+              </li>
+              <li>
+                <a href="{{ url_for('data_perawatan') }}" class="nav-link active">Data Pengembalian</a>
+              </li>
+              <li>
+                <a href="{{ url_for('artikel') }}" class="nav-link link-body-emphasis">Artikel</a>
+              </li>
+              <li>
+                <button onclick="logout()" type="button" class="btn btn-outline-primary">Logout</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-8 col-12">
+          <div class="card w-100" style="border-radius: 1em;">
+            <div class="text-center mb-3 pb-3 mt-4">
+              <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">DATA PERAWATAN SENJATA</h6>
+              <h2>Data Perawatan Senjata</h2>
+            </div>
+            <hr />
+          </div>
+          <section class="card-body mt-3">
+            <h2>Data Perawatan Senjata</h2>
+            <div class="table-responsive">
+              <!-- Display Maintenance Data -->
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Nama Senjata</th>
+                    <th scope="col">Tanggal Perawatan</th>
+                    <th scope="col">Nama Petugas</th>
+                    <th scope="col">Keterangan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for maintenance_item in maintenance_data %}
+                    <tr>
+                      <th scope="row">{{ loop.index }}</th>
+                      <td>{{ maintenance_item['nama_senjata'] }}</td>
+                      <td>{{ maintenance_item['tanggal_perawatan'] }}</td>
+                      <td>{{ maintenance_item['nama_petugas'] }}</td>
+                      <td>{{ maintenance_item['keterangan'] }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script>
+      function logout() {
+        $.removeCookie('mytoken', { path: '/' })
+        Swal.fire({
+          title: 'Anda telah logout',
+          text: 'Kami menanti kedatanganmu kembali 😊',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 3000
+        })
+      
+        // Menunda pengalihan halaman selama 3 detik
+        setTimeout(function () {
+          window.location.href = 'login'
+        }, 3000)
+      }
+    </script>
+  </body>
+</html>

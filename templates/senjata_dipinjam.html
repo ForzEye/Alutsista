@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <title>Index</title>
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
+
+    <!-- Vendor CSS Files -->
+    <link href="{{ url_for('static', filename = 'assets/vendor/aos/aos.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename = 'assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename = 'assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename = 'assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename = 'assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename = 'assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet" />
+
+    <!-- Template Main CSS File -->
+    <link href="{{ url_for('static', filename = 'assets/css/style.css') }}" rel="stylesheet" />
+  </head>
+
+  <body>
+    <!-- ======= Header ======= -->
+    <header id="header" class="d-flex align-items-center">
+      <div class="container d-flex align-items-center justify-content-between">
+        <h1 class="logo"><a href="index.html">Alutsista<span>.</span></a></h1>
+
+        <nav id="navbar" class="navbar">
+          <ul>
+            <li>
+              <a class="nav-link scrollto" href="{{ url_for('index') }}">Home</a>
+            </li>
+            <li>
+              <a class="nav-link scrollto" href="{{ url_for('pinjam') }}">Pinjam Alutsista</a>
+            </li>
+            <li>
+              <a class="nav-link scrollto active" href="{{ url_for('senjata_dipinjam') }}">Senjata Dipinjam</a>
+            </li>
+            <li>
+              <a class="nav-link scrollto" href="{{ url_for('tambah_perawatan') }}">Perawatan Senjata</a>
+            </li>
+            <li>
+              <a onclick="logout()" type="button" class="btn btn-outline-light">Logout</a>
+            </li>
+          </ul>
+          <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+        <!-- .navbar -->
+      </div>
+    </header>
+    <!-- End Header -->
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 mb-4">
+          {% if borrowed_data %}
+            {% for borrowed_item in borrowed_data %}
+              <div class="content-zoom">
+                <section class="package-item bg-white mb-2 shadow bg-body rounded">
+                  <div class="p-2">
+                    <h4 class="title mt-2">{{ borrowed_item['nama_senjata'] }}</h4>
+                    <p class="count">Jumlah Dipinjam: {{ borrowed_item['borrow_quantity'] }}</p>
+                    <p class="duration">Durasi Peminjaman: {{ borrowed_item['borrow_duration'] }} hari</p>
+                    <p class="borrower">Peminjam: {{ borrowed_item['nama_peminjam'] }}</p>
+                    <!-- Display the approval status -->
+                    {% if borrowed_item.get('approval_status') == 'Disetujui' %}
+                      <p class="status text-success">Status: Sudah Disetujui</p>
+                      <!-- Add the "Kembalikan Senjata" button -->
+                      <form action="{{ url_for('kembalikan_senjata', senjata_id = borrowed_item['senjata_id']) }}" method="post">
+                        <button type="submit" class="btn btn-primary">Kembalikan Senjata</button>
+                      </form>
+                    {% elif borrowed_item.get('approval_status') == 'Ditolak' %}
+                      <p class="status text-danger">Status: Ditolak</p>
+                    {% else %}
+                      <p class="status text-warning">Status: Menunggu Persetujuan</p>
+                      <!-- Add the "Batalkan Peminjaman" button -->
+                      <form action="{{ url_for('batalkan_peminjaman', senjata_id = borrowed_item['senjata_id']) }}" method="post">
+                        <button type="submit" class="btn btn-danger">Batalkan Peminjaman</button>
+                      </form>
+                    {% endif %}
+                    <!-- Display additional status information if available -->
+                    {% if status_info and status_info.senjata_id == borrowed_item['senjata_id'] %}
+                      <p>Status Information: {{ status_info.approval_status }} for Senjata ID {{ status_info.senjata_id }}</p>
+                    {% endif %}
+                  </div>
+                </section>
+              </div>
+            {% endfor %}
+          {% else %}
+            <p>Tidak ada senjata yang sedang dipinjam.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <!-- ======= Hero Section ======= -->
+
+    <!-- Vendor JS Files -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ url_for('static', filename = 'assets/vendor/purecounter/purecounter_vanilla.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'assets/vendor/aos/aos.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'assets/vendor/glightbox/js/glightbox.min.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'assets/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'assets/vendor/swiper/swiper-bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'assets/vendor/waypoints/noframework.waypoints.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'assets/vendor/php-email-form/validate.js') }}"></script>
+
+    <!-- Template Main JS File -->
+    <script src="{{ url_for('static', filename = 'assets/js/main.js') }}"></script>
+
+    <script>
+      function logout() {
+        $.removeCookie('mytoken', { path: '/' })
+        Swal.fire({
+          title: 'Anda telah logout',
+          text: 'Kami menanti kedatanganmu kembali 😊',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 3000
+        })
+      
+        // Menunda pengalihan halaman selama 3 detik
+        setTimeout(function () {
+          window.location.href = 'login'
+        }, 3000)
+      }
+    </script>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  </body>
+</html>

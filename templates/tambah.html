@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Page</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+
+    <!-- Summernote CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet" />
+
+    <!-- Custom Styles -->
+    <link href="{{ url_for('static', filename = 'style.css') }}" rel="stylesheet" />
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <!-- Summernote JS -->
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+
+    <!-- Popper.js Core -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 bg-body-tertiary" id="navbar">
+      <a href="/dashboard" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"><h2>ALUTSISTA</h2></a>
+
+      <ul class="nav nav-pills" id="admin">
+        <li class="nav-item">
+          <h3 id="current-time"></h3>
+        </li>
+        <li class="nav-item">
+          <h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+            </svg>
+          </h3>
+        </li>
+      </ul>
+    </header>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-4 col-12">
+          <div class="d-flex flex-column p-3 bg-body-tertiary">
+            <ul class="nav nav-pills flex-column mb-auto">
+              <li class="nav-item">
+                <a href="{{ url_for('admin') }}" class="nav-link link-body-emphasis" aria-current="page">Dashboard</a>
+              </li>
+              <li>
+                <a href="{{ url_for('tambah') }}" class="nav-link active">Tambah Senjata</a>
+              </li>
+              <li>
+                <a href="{{ url_for('data_peminjam') }}" class="nav-link link-body-emphasis">Data Peminjam</a>
+              </li>
+              <li>
+                <a href="{{ url_for('data_pengembalian') }}" class="nav-link link-body-emphasis">Data Pengembalian</a>
+              </li>
+              <li>
+                <a href="{{ url_for('data_perawatan') }}" class="nav-link link-body-emphasis">Data Pengembalian</a>
+              </li>
+              <li>
+                <a href="{{ url_for('artikel') }}" class="nav-link link-body-emphasis">Artikel</a>
+              </li>
+              <li>
+                <button onclick="logout()" type="button" class="btn btn-outline-primary">Logout</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-8 col-12">
+          <div class="card w-100" style="border-radius: 1em;">
+            <div class="text-center mb-3 pb-3 mt-4">
+              <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">FORM</h6>
+              <h2>TAMBAH DATA SENJATA</h2>
+            </div>
+            <hr />
+            <section class="card-body mt-3">
+              <form method="post" action="{{ url_for('tambah_senjata') }}" enctype="multipart/form-data">
+                <div class="row">
+                  <!-- Form inputs -->
+                  <div class="col-md-6 mb-3">
+                    <label for="nama-senjata" class="form-label">Nama Senjata</label>
+                    <input type="text" class="form-control" id="nama-senjata" name="nama_give" placeholder="Input some values" required />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="jumlah" class="form-label">Jumlah</label>
+                    <input type="number" class="form-control" id="jumlah" name="jumlah_give" placeholder="Input some values" required />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="tahun-pembuatan" class="form-label">Tahun Pembuatan</label>
+                    <input type="number" class="form-control" id="tahun-pembuatan" name="tahun_pembuatan_give" placeholder="Input some values" required />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="type" class="form-label">Type Senjata</label>
+                    <select class="form-select" id="type" name="type" required>
+                      <option value="senjata_ringan">Senjata Ringan</option>
+                      <option value="meriam_roket_rudal">Meriam/Roket/Rudal</option>
+                      <option value="kendaraan_tempur">Kendaraan Tempur</option>
+                      <option value="pesawat_terbang">Pesawat Terbang</option>
+                    </select>
+                  </div>
+                  <div class="col-12 mb-5">
+                    <label for="deskripsi" class="form-label">Deskripsi</label>
+                    <textarea class="form-control" id="deskripsi" name="deskripsi_give" placeholder="Input some values" rows="5" required></textarea>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <label for="gambar" class="form-label">Gambar Senjata</label>
+                    <input class="form-control form-control" id="gambar" name="file_give" type="file" required />
+                  </div>
+                </div>
+                <!-- Buttons -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end" style="height: 50px;">
+                  <button type="submit" class="btn btn-primary me-md-2" style="width: 100%;">Simpan</button>
+                  <a href="{{ url_for('index') }}" class="btn btn-secondary">Kembali</a>
+                </div>
+              </form>
+            </section>
+          </div>
+
+          <!-- Data Senjata Table -->
+          <section class="card-body mt-3">
+            <h2>Daftar Data Senjata</h2>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Nama Senjata</th>
+                    <th scope="col">Jumlah</th>
+                    <th scope="col">Tahun Pembuatan</th>
+                    <th scope="col">Tipe</th>
+                    <th scope="col">Deskripsi</th>
+                    <th scope="col">Gambar</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for senjata in senjata_list %}
+                    <tr>
+                      <td>{{ senjata.nama }}</td>
+                      <td>{{ senjata.jumlah }}</td>
+                      <td>{{ senjata.tahun_pembuatan }}</td>
+                      <td>{{ senjata.type }}</td>
+                      <td>{{ senjata.deskripsi }}</td>
+                      <td>
+                        <img src="{{ url_for('static', filename = 'img_senjata/' + senjata.picture) }}" alt="{{ senjata.nama }}" height="50" />
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ senjata['_id'] }}">Edit</button>
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete('{{ senjata['_id'] }}')">Delete</button>
+                      </td>
+                    </tr>
+
+                    <!-- Edit Modal -->
+                    <div class="modal fade" id="editModal{{ senjata['_id'] }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel">Edit Senjata</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <!-- Include your edit form here -->
+                            <form method="POST" action="{{ url_for('update_senjata', senjata_id = senjata['_id']) }}">
+                              <div class="form-group">
+                                <label for="nama_give">Nama:</label>
+                                <input type="text" class="form-control" id="nama_give" name="nama_give" value="{{ senjata.nama }}" required />
+                              </div>
+                              <div class="form-group">
+                                <label for="jumlah_give">Jumlah:</label>
+                                <input type="text" class="form-control" id="jumlah_give" name="jumlah_give" value="{{ senjata.jumlah }}" required />
+                              </div>
+                              <div class="form-group">
+                                <label for="deskripsi_give">Deskripsi:</label>
+                                <textarea class="form-control" id="deskripsi_give" name="deskripsi_give" rows="3" required>{{ senjata.deskripsi }}</textarea>
+                              </div>
+                              <div class="form-group">
+                                <label for="tahun_pembuatan_give">Tahun Pembuatan:</label>
+                                <input type="text" class="form-control" id="tahun_pembuatan_give" name="tahun_pembuatan_give" value="{{ senjata.tahun_pembuatan }}" required />
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <!-- Summernote JS -->
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+    <!-- Your custom scripts -->
+    <script src="{{ url_for('static', filename = 'script.js') }}"></script>
+
+    <script>
+      function updateCurrentTime() {
+        var options = {
+          day: 'numeric',
+          month: 'numeric',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric',
+          hour12: false
+        }
+        var currentTime = new Date().toLocaleString(undefined, options)
+        document.getElementById('current-time').innerText = currentTime
+      }
+      
+      setInterval(updateCurrentTime, 1000)
+      updateCurrentTime()
+      
+      function confirmDelete(senjataId) {
+        var confirmation = confirm('Are you sure you want to delete this senjata?')
+        if (confirmation) {
+          window.location.href = "{{ url_for('delete_senjata', senjata_id='') }}" + senjataId
+        }
+      }
+      
+      function logout() {
+        $.removeCookie('mytoken', { path: '/' })
+        Swal.fire({
+          title: 'Anda telah logout',
+          text: 'Kami menanti kedatanganmu kembali 😊',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 3000
+        })
+      
+        // Menunda pengalihan halaman selama 3 detik
+        setTimeout(function () {
+          window.location.href = 'login'
+        }, 3000)
+      }
+    </script>
+  </body>
+</html>
