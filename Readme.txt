@@ -6,4 +6,4 @@ Gilang Sulaeman        : Programmer
 Feriardus Orlan Bangur : Programmer
 
 Progress Website
-Baru sampai pembuatan hero section 
+Sudah Selesai dan siap Hosting
